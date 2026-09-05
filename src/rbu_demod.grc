@@ -33,6 +33,18 @@ options:
     state: enabled
 
 blocks:
+- name: cutoff_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: '1000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [256, 76.0]
+    rotation: 0
+    state: enabled
 - name: fir_decim
   id: variable
   parameters:
@@ -69,6 +81,18 @@ blocks:
     coordinate: [184, 12]
     rotation: 0
     state: enabled
+- name: transition_bw
+  id: variable
+  parameters:
+    comment: ''
+    value: '2000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [368, 76.0]
+    rotation: 0
+    state: enabled
 - name: audio_source_0
   id: audio_source
   parameters:
@@ -87,7 +111,7 @@ blocks:
     bus_structure: null
     coordinate: [32, 272.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_complex_to_mag_0_0
   id: blocks_complex_to_mag
   parameters:
@@ -119,7 +143,7 @@ blocks:
     bus_structure: null
     coordinate: [296, 272.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_float_to_complex_0_0
   id: blocks_float_to_complex
   parameters:
@@ -135,7 +159,7 @@ blocks:
     bus_structure: null
     coordinate: [296, 168.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: blocks_throttle2_0_0
   id: blocks_throttle2
   parameters:
@@ -164,7 +188,7 @@ blocks:
     alias: ''
     comment: ''
     file: "/mnt/\u041C\u0443\u043B\u044C\u0442\u0438\u043C\u0435\u0434\u0438\u0430\
-      /esp32/rbu/rbu5min_7.wav"
+      /esp32/rbu/wav/iq_rbu5min.wav"
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '2'
@@ -175,7 +199,7 @@ blocks:
     bus_structure: null
     coordinate: [56, 168.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: epy_block_0
   id: epy_block
   parameters:
@@ -279,6 +303,26 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [680, 184.0]
+    rotation: 0
+    state: enabled
+- name: freq_xlating_fir_filter_xxx_0
+  id: freq_xlating_fir_filter_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    center_freq: '4769'
+    comment: ''
+    decim: fir_decim
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    taps: firdes.low_pass(1, samp_rate, cutoff_freq, transition_bw)
+    type: ccc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [720, 12.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_0
@@ -468,7 +512,7 @@ blocks:
     color9: '0'
     comment: ''
     fc: '0'
-    fftsize: '4096'
+    fftsize: '512'
     freqhalf: 'True'
     grid: 'False'
     gui_hint: ''
@@ -487,7 +531,7 @@ blocks:
     legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: Decoder
+    name: FIR
     nconnections: '1'
     showports: 'True'
     type: complex
@@ -497,7 +541,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [864, 48.0]
+    coordinate: [1032, 40.0]
     rotation: 0
     state: enabled
 
@@ -508,11 +552,12 @@ connections:
 - [blocks_float_to_complex_0, '0', blocks_throttle2_0_0, '0']
 - [blocks_float_to_complex_0_0, '0', blocks_throttle2_0_0, '0']
 - [blocks_throttle2_0_0, '0', epy_block_0, '0']
+- [blocks_throttle2_0_0, '0', freq_xlating_fir_filter_xxx_0, '0']
 - [blocks_throttle2_0_0, '0', qtgui_waterfall_sink_x_0_0_0, '0']
 - [blocks_wavfile_source_0, '0', blocks_float_to_complex_0_0, '0']
 - [blocks_wavfile_source_0, '1', blocks_float_to_complex_0_0, '1']
 - [epy_block_0, '0', blocks_complex_to_mag_0_0, '0']
-- [epy_block_0, '0', qtgui_waterfall_sink_x_0_0_0_0, '0']
+- [freq_xlating_fir_filter_xxx_0, '0', qtgui_waterfall_sink_x_0_0_0_0, '0']
 
 metadata:
   file_format: 1
