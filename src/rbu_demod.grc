@@ -1,0 +1,519 @@
+options:
+  parameters:
+    author: ''
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: rbu
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: Not titled yet
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: fir_decim
+  id: variable
+  parameters:
+    comment: ''
+    value: '96'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 12.0]
+    rotation: 0
+    state: enabled
+- name: freq_center
+  id: variable
+  parameters:
+    comment: ''
+    value: '66660'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 12.0]
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: '192000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [184, 12]
+    rotation: 0
+    state: enabled
+- name: audio_source_0
+  id: audio_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device_name: hw:CARD=reciever,DEV=1
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_outputs: '2'
+    ok_to_block: 'True'
+    samp_rate: samp_rate
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 272.0]
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_mag_0_0
+  id: blocks_complex_to_mag
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [864, 184.0]
+    rotation: 0
+    state: enabled
+- name: blocks_float_to_complex_0
+  id: blocks_float_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 272.0]
+    rotation: 0
+    state: enabled
+- name: blocks_float_to_complex_0_0
+  id: blocks_float_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [296, 168.0]
+    rotation: 0
+    state: disabled
+- name: blocks_throttle2_0_0
+  id: blocks_throttle2
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    limit: auto
+    maximum: '0.1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 172.0]
+    rotation: 0
+    state: enabled
+- name: blocks_wavfile_source_0
+  id: blocks_wavfile_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    file: "/mnt/\u041C\u0443\u043B\u044C\u0442\u0438\u043C\u0435\u0434\u0438\u0430\
+      /esp32/rbu/rbu5min_7.wav"
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nchan: '2'
+    repeat: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [56, 168.0]
+    rotation: 0
+    state: disabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\nfrom scipy.signal\
+      \ import resample_poly\n\nY ={25:80,26:40,27:20,28:10,29:8,30:4,31:2,32:1}\n\
+      MO={33:10,34:8,35:4,36:2,37:1}\nW ={38:4,39:2,40:1}\nD ={41:20,42:10,43:8,44:4,45:2,46:1}\n\
+      H ={47:20,48:10,49:8,50:4,51:2,52:1}\nMI={53:40,54:20,55:10,56:8,57:4,58:2,59:1}\n\
+      TJD={18:8000,19:4000,20:2000,21:1000,22:800,23:400,24:200,25:100,\n     26:80,27:40,28:20,29:10,30:8,31:4,32:2,33:1}\n\
+      PAR={49:'P1',50:'P2',53:'P3',54:'P4',55:'P5',56:'P6',57:'P7',58:'P8'}\nRES0={1,2,8,9,10,16,17,24}\n\
+      RES2=set(range(34,49))|{17,51,52,59}\nDOW=['\u041F\u043D','\u0412\u0442','\u0421\
+      \u0440','\u0427\u0442','\u041F\u0442','\u0421\u0431','\u0412\u0441']\n\nclass\
+      \ blk(gr.sync_block):\n    def __init__(self):\n        gr.sync_block.__init__(self,name='RBU_decoder',\n\
+      \            in_sig=[np.complex64],out_sig=[np.complex64])\n        self.raw=np.zeros(0,np.complex64);\
+      \ self.bbbuf=np.zeros(0,np.complex64)\n        self.fc=None; self.chunk=0\n\
+      \        self.elems=[]; self.rawrows=[]; self.rows=[]\n        self.sh=None;\
+      \ self.anchor=None\n        self.h1={}; self.h2={}; self.latest1={}; self.min_latch=None\n\
+      \        n=np.arange(192)\n        self.e100p=np.exp(-1j*2*np.pi*100.0*n/2000.);\
+      \ self.e100m=self.e100p.conj()\n        self.e312p=np.exp(-1j*2*np.pi*312.5*n/2000.);\
+      \ self.e312m=self.e312p.conj()\n        print('[RBU] t=  0.0s \u0437\u0430\u043F\
+      \u0443\u0449\u0435\u043D')\n    def work(self,inp,out):\n        x=inp[0]; out[0][:]=x\n\
+      \        self.raw=np.concatenate([self.raw,x])\n        if self.fc is None and\
+      \ len(self.raw)>=192000:\n            sp=np.abs(np.fft.fft(self.raw[:192000]*np.blackman(192000)))\n\
+      \            fr=np.fft.fftfreq(192000,1/192000.); m=(fr>4000)&(fr<6000)\n  \
+      \          self.fc=fr[m][np.argmax(sp[m])]; print('[RBU] \u043D\u0435\u0441\u0443\
+      \u0449\u0430\u044F %.1f'%self.fc)\n        while len(self.raw)>=192000:\n  \
+      \          ch=self.raw[:192000]; self.raw=self.raw[192000:]\n            t=(self.chunk+np.arange(192000))/192000.0\n\
+      \            self.bbbuf=np.concatenate([self.bbbuf,resample_poly(ch*np.exp(-1j*2*np.pi*self.fc*t),2000,192000)])\n\
+      \            self.chunk+=1\n        while self.fc is not None and len(self.bbbuf)>=200:\n\
+      \            seg=self.bbbuf[4:196]; self.bbbuf=self.bbbuf[200:]\n          \
+      \  if len(seg)<192: continue\n            p100=abs(np.sum(seg*self.e100p))**2+abs(np.sum(seg*self.e100m))**2\n\
+      \            p312=abs(np.sum(seg*self.e312p))**2+abs(np.sum(seg*self.e312m))**2\n\
+      \            self.elems.append(1 if p312>p100 else 0)\n            if len(self.elems)>=10:\n\
+      \                self.on_row(self.elems[:10]); self.elems=self.elems[10:]\n\
+      \        return len(x)\n    def on_row(self,raw):\n        if self.sh is None:\n\
+      \            self.rawrows.append(raw)\n            if len(self.rawrows)>=30:\n\
+      \                best=None\n                for sh in range(10):\n         \
+      \           p=np.roll(np.array(self.rawrows),-sh,axis=1)\n                 \
+      \   sc=p[:,9].mean()-p[:,2:7].mean(axis=0).max()\n                    if best\
+      \ is None or sc>best[0]: best=(sc,sh)\n                self.sh=best[1]\n   \
+      \             self.rows=[list(np.roll(r,-self.sh)) for r in self.rawrows]\n\
+      \                print('[RBU] t=%5.1fs sh=%d'%(self.chunk,self.sh))\n      \
+      \          for i,r in enumerate(self.rows):\n                    if r[0]==1\
+      \ and r[1]==1: self.anchor=i;break\n                if self.anchor is not None:\
+      \ print('[RBU] \u042F\u041A\u041E\u0420\u042C %d'%self.anchor); self.rebuild()\n\
+      \            return\n        row=list(np.roll(raw,-self.sh)); self.rows.append(row)\n\
+      \        if self.anchor is None:\n            if row[0]==1 and row[1]==1:\n\
+      \                self.anchor=len(self.rows)-1; print('[RBU] \u042F\u041A\u041E\
+      \u0420\u042C %d'%self.anchor); self.rebuild()\n            return\n        self.ingest(len(self.rows)-1);\
+      \ self.status()\n    def rebuild(self):\n        self.h1={}; self.h2={}; self.latest1={};\
+      \ self.min_latch=None\n        for i in range(len(self.rows)): self.ingest(i)\n\
+      \        self.status()\n    def ingest(self,i):\n        s=(i-self.anchor)%60;\
+      \ r=self.rows[i]\n        for h,v in ((self.h1,r[0]),(self.h2,r[1])):\n    \
+      \        h.setdefault(s,[]).append(v); h[s]=h[s][-8:]\n        self.latest1[s]=r[0]\n\
+      \        if s==0 and all(q in self.latest1 for q in range(53,60)):\n       \
+      \     self.min_latch=sum(self.latest1[q]*w for q,w in MI.items())\n    def conf(self,s,col):\n\
+      \        h=self.h1 if col==0 else self.h2\n        if s not in h or not h[s]:\
+      \ return None,0.0\n        m=np.mean(h[s]); return int(m>0.5),abs(m-0.5)\n \
+      \   def group(self,members):\n        bits={};cf={}\n        for sc in members:\n\
+      \            b,c=self.conf(*sc)\n            if b is None: return None\n   \
+      \         bits[sc]=b;cf[sc]=c\n        if sum(bits.values())%2:\n          \
+      \  f=min(cf,key=cf.get); bits[f]^=1\n        return bits\n    def field(self,pairs,psec):\n\
+      \        g=self.group([(s,0) for s,_ in pairs]+[(psec,1)])\n        if g is\
+      \ not None: return sum(g[(s,0)]*w for s,w in pairs)\n        v=0\n        for\
+      \ s,w in pairs:\n            b,_=self.conf(s,0)\n            if b is None: return\
+      \ None\n            v|=b*w\n        return v\n    def valid_of(self,s,row):\n\
+      \        ok=all(row[i]==0 for i in range(2,7)) and row[9]==1\n        if s is\
+      \ None: return ok\n        if s==0: ok=ok and row[0]==1 and row[1]==1 and row[7]==1\
+      \ and row[8]==1\n        else:    ok=ok and row[7]==0 and row[8]==0\n      \
+      \  if s in RES0: ok=ok and row[0]==0\n        if s in RES2: ok=ok and row[1]==0\n\
+      \        return ok\n    def tag1(self,s,b):\n        for M,pre in ((Y,'Y'),(MO,'M'),(W,'W'),(D,'D'),(H,'H'),(MI,'m')):\n\
+      \            if s in M: return '%s%d=%d'%(pre,M[s],b)\n        if s==0:return\
+      \ '\u0441\u0442\u0430\u0440\u04421'; \n        if 3<=s<=7:return 'DUT+1'; \n\
+      \        if 11<=s<=15:return 'DUT-1'; \n        if 18<=s<=23:return 'TJD1'\n\
+      \        return '\u0440\u0435\u0437\u0435\u0440\u04321'\n    def tag2(self,s,b):\n\
+      \        if s in PAR: return '%s=%d'%(PAR[s],b)\n        if s in TJD: return\
+      \ 'TJD%d=%d'%(TJD[s],b)\n        if 1<=s<=8: return 'DUT1+=%d'%b\n        if\
+      \ 9<=s<=16:return 'DUT1-=%d'%b\n        if s==0:return '\u0441\u0442\u0430\u0440\
+      \u04422'\n        return '\u0440\u0435\u0437\u0435\u0440\u04322'\n    def status(self):\n\
+      \        t=self.chunk\n        s=(len(self.rows)-1-self.anchor)%60 if self.anchor\
+      \ is not None else None\n        yr=self.field(list(Y.items()),54); mo=self.field(list(MO.items()),55)\n\
+      \        dd=self.field(list(D.items()),56); hh=self.field(list(H.items()),57)\n\
+      \        dw=self.field(list(W.items()),55)\n        Ys=('%04d'%(2000+yr)) if\
+      \ yr is not None else 'YYYY'\n        Mo=('%02d'%mo) if mo is not None else\
+      \ 'MM'\n        Ds=('%02d'%dd) if dd is not None else 'DD'\n        Hs=('%02d'%hh)\
+      \ if hh is not None else 'HH'\n        Mi=('%02d'%self.min_latch) if self.min_latch\
+      \ is not None else 'MM'\n        Ss=('%02d'%s) if s is not None else 'SS'\n\
+      \        row=self.rows[-1]\n        print('[RBU] t=%6.1fs %s.%s.%s %s:%s:%s\
+      \ | \u043A\u0430\u0434\u0440:%s %s | \u04311:%s \u04312:%s'%(\n            t,Ys,Mo,Ds,Hs,Mi,Ss,''.join(map(str,row)),\n\
+      \            'V' if self.valid_of(s,row) else '-',\n            self.tag1(s,row[0])\
+      \ if s is not None else '',\n            self.tag2(s,row[1]) if s is not None\
+      \ else ''))\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('RBU_decoder', 'blk', [], [('0', 'complex', 1)], [('0', 'complex',
+      1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [680, 184.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label1: Signal 1
+    label10: Signal 10
+    label2: Signal 2
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: Decoder Mag
+    nconnections: '1'
+    size: '2000'
+    srate: samp_rate/fir_decim
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1'
+    ymin: '-1'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1048, 156.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_waterfall_sink_x_0_0_0
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '0'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: '0'
+    fftsize: '4096'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    int_max: '10'
+    int_min: '-140'
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: Source
+    nconnections: '1'
+    showports: 'True'
+    type: complex
+    update_time: '0.02'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 280.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_waterfall_sink_x_0_0_0_0
+  id: qtgui_waterfall_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    axislabels: 'True'
+    bw: samp_rate/fir_decim
+    color1: '0'
+    color10: '0'
+    color2: '0'
+    color3: '0'
+    color4: '0'
+    color5: '0'
+    color6: '0'
+    color7: '0'
+    color8: '0'
+    color9: '0'
+    comment: ''
+    fc: '0'
+    fftsize: '4096'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    int_max: '10'
+    int_min: '-140'
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: Decoder
+    nconnections: '1'
+    showports: 'True'
+    type: complex
+    update_time: '0.02'
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [864, 48.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [audio_source_0, '0', blocks_float_to_complex_0, '0']
+- [audio_source_0, '1', blocks_float_to_complex_0, '1']
+- [blocks_complex_to_mag_0_0, '0', qtgui_time_sink_x_0_0, '0']
+- [blocks_float_to_complex_0, '0', blocks_throttle2_0_0, '0']
+- [blocks_float_to_complex_0_0, '0', blocks_throttle2_0_0, '0']
+- [blocks_throttle2_0_0, '0', epy_block_0, '0']
+- [blocks_throttle2_0_0, '0', qtgui_waterfall_sink_x_0_0_0, '0']
+- [blocks_wavfile_source_0, '0', blocks_float_to_complex_0_0, '0']
+- [blocks_wavfile_source_0, '1', blocks_float_to_complex_0_0, '1']
+- [epy_block_0, '0', blocks_complex_to_mag_0_0, '0']
+- [epy_block_0, '0', qtgui_waterfall_sink_x_0_0_0_0, '0']
+
+metadata:
+  file_format: 1
+  grc_version: 3.10.9.2
